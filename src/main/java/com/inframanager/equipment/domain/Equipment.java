@@ -1,4 +1,4 @@
-package com.inframanager.equipment;
+package com.inframanager.equipment.domain;
 
 public class Equipment {
     private Long id;

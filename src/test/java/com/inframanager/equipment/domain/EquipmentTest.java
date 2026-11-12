@@ -1,4 +1,4 @@
-package com.inframanager.equipment;
+package com.inframanager.equipment.domain;
 
 import org.junit.jupiter.api.Test;
 
