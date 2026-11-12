@@ -11,15 +11,19 @@ public class EquipmentServiceTest {
 
     private static class FakeEquipmentRepository implements EquipmentRepository {
 
+        private int saveCallCount = 0;
+
         @Override
         public Equipment save(Equipment equipment) {
+            saveCallCount++;
             return equipment;
         }
+
     }
 
     @Test
     public void shouldCreateEquipment() {
-        EquipmentRepository repository = new FakeEquipmentRepository();
+        FakeEquipmentRepository repository = new FakeEquipmentRepository();
         EquipmentService service = new EquipmentService(repository);
 
         Equipment equipment = service.createEquipment(
@@ -29,6 +33,7 @@ public class EquipmentServiceTest {
         );
 
         assertEquals("Routeur principal", equipment.getName());
+        assertEquals(1, repository.saveCallCount);
     }
 
 }
