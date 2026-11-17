@@ -16,6 +16,20 @@ public class Equipment {
         this.model = model;
     }
 
+    public static Equipment reconstitute(
+            Long id,
+            String name,
+            String manufacturer,
+            String model,
+            String ipAddress
+    ) {
+        Equipment equipment = new Equipment(name, manufacturer, model);
+        equipment.id = id;
+        equipment.ipAddress = ipAddress;
+
+        return equipment;
+    }
+
     private void validateName(String name) {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Le nom de l'équipement est obligatoire");

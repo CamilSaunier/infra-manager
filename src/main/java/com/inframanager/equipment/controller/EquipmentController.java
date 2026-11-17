@@ -26,6 +26,13 @@ public class EquipmentController {
                 .toList();
     }
 
+    @GetMapping("/{id}")
+    public EquipmentResponse getEquipmentById(@PathVariable Long id) {
+        return EquipmentResponse.from(
+                equipmentService.getEquipmentById(id)
+        );
+    }
+
     @PostMapping
     public void createEquipment(@RequestBody EquipmentRequest equipmentBody) {
         equipmentService.createEquipment(

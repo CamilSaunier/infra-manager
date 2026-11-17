@@ -3,7 +3,9 @@ package com.inframanager.equipment.service;
 import com.inframanager.equipment.domain.Equipment;
 import com.inframanager.equipment.persistence.entity.EquipmentEntity;
 import com.inframanager.equipment.repository.EquipmentRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -19,12 +21,30 @@ public class EquipmentService {
     public List<Equipment> getAllEquipment() {
         return equipmentRepository.findAll()
                 .stream()
-                .map(entity -> new Equipment(
+                .map(entity -> Equipment.reconstitute(
+                        entity.getId(),
                         entity.getName(),
                         entity.getManufacturer(),
-                        entity.getModel()
+                        entity.getModel(),
+                        entity.getIpAddress()
                 ))
                 .toList();
+    }
+
+    public Equipment getEquipmentById(Long id) {
+        EquipmentEntity entity = equipmentRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Equipment not found"
+                ));
+        
+        return Equipment.reconstitute(
+                entity.getId(),
+                entity.getName(),
+                entity.getManufacturer(),
+                entity.getModel(),
+                entity.getIpAddress()
+        );
     }
 
     public Equipment createEquipment(String name, String manufacturer, String model) {

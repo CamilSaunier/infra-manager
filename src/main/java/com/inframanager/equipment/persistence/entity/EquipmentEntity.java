@@ -1,6 +1,5 @@
 package com.inframanager.equipment.persistence.entity;
 
-import com.inframanager.equipment.domain.Equipment;
 import jakarta.persistence.*;
 
 @Entity
@@ -9,7 +8,7 @@ import jakarta.persistence.*;
 
 public class EquipmentEntity {
 
-    public EquipmentEntity(){
+    public EquipmentEntity() {
 
     }
 
@@ -30,6 +29,10 @@ public class EquipmentEntity {
 
     @Column(length = 45)
     private String ipAddress;
+
+    public Long getId() {
+        return id;
+    }
 
     public String getName() {
         return name;
@@ -53,6 +56,14 @@ public class EquipmentEntity {
 
     public void setModel(String model) {
         this.model = model;
+    }
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
     }
 }
 
