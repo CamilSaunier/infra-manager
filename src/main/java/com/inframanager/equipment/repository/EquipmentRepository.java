@@ -1,8 +1,7 @@
 package com.inframanager.equipment.repository;
 
-import com.inframanager.equipment.domain.Equipment;
+import com.inframanager.equipment.persistence.entity.EquipmentEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface EquipmentRepository {
-
-    Equipment save(Equipment equipment);
+public interface EquipmentRepository extends JpaRepository<EquipmentEntity, Long> {
 }

@@ -1,5 +1,6 @@
 package com.inframanager.equipment.persistence.entity;
 
+import com.inframanager.equipment.domain.Equipment;
 import jakarta.persistence.*;
 
 @Entity
@@ -7,6 +8,10 @@ import jakarta.persistence.*;
 @Table(name = "equipment")
 
 public class EquipmentEntity {
+
+    public EquipmentEntity(){
+
+    }
 
     @Id
 
@@ -25,6 +30,30 @@ public class EquipmentEntity {
 
     @Column(length = 45)
     private String ipAddress;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getManufacturer() {
+        return manufacturer;
+    }
+
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
 }
 
 // en SQL ça donnerais quelque chose comme ça

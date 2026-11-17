@@ -1,6 +1,7 @@
 package com.inframanager.equipment.service;
 
 import com.inframanager.equipment.domain.Equipment;
+import com.inframanager.equipment.persistence.entity.EquipmentEntity;
 import com.inframanager.equipment.repository.EquipmentRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,18 @@ public class EquipmentService {
 
     public Equipment createEquipment(String name, String manufacturer, String model) {
         Equipment newEquipment = new Equipment(name, manufacturer, model);
-        return equipmentRepository.save(newEquipment);
+
+        EquipmentEntity entity = new EquipmentEntity();
+        entity.setName(newEquipment.getName());
+        entity.setManufacturer(newEquipment.getManufacturer());
+        entity.setModel(newEquipment.getModel());
+
+        EquipmentEntity savedEntity = equipmentRepository.save(entity);
+
+        return new Equipment(
+                savedEntity.getName(),
+                savedEntity.getManufacturer(),
+                savedEntity.getModel()
+        );
     }
 }
