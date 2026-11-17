@@ -5,6 +5,8 @@ import com.inframanager.equipment.persistence.entity.EquipmentEntity;
 import com.inframanager.equipment.repository.EquipmentRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class EquipmentService {
 
@@ -12,6 +14,17 @@ public class EquipmentService {
 
     public EquipmentService(EquipmentRepository equipmentRepository) {
         this.equipmentRepository = equipmentRepository;
+    }
+
+    public List<Equipment> getAllEquipment() {
+        return equipmentRepository.findAll()
+                .stream()
+                .map(entity -> new Equipment(
+                        entity.getName(),
+                        entity.getManufacturer(),
+                        entity.getModel()
+                ))
+                .toList();
     }
 
     public Equipment createEquipment(String name, String manufacturer, String model) {

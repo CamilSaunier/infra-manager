@@ -1,11 +1,12 @@
 
 package com.inframanager.equipment.controller;
 
-import com.inframanager.equipment.domain.Equipment;
 import com.inframanager.equipment.dto.EquipmentRequest;
 import com.inframanager.equipment.dto.EquipmentResponse;
 import com.inframanager.equipment.service.EquipmentService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/equipment")
@@ -18,14 +19,11 @@ public class EquipmentController {
     }
 
     @GetMapping
-    public EquipmentResponse getEquipment() {
-        Equipment equipment = new Equipment(
-                "Routeur principal",
-                "Cisco",
-                "Catalyst 9200"
-        );
-
-        return EquipmentResponse.from(equipment);
+    public List<EquipmentResponse> getEquipment() {
+        return equipmentService.getAllEquipment()
+                .stream()
+                .map(EquipmentResponse::from)
+                .toList();
     }
 
     @PostMapping
