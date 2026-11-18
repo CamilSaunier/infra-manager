@@ -3,6 +3,7 @@ package com.inframanager.equipment.service;
 import com.inframanager.equipment.domain.Equipment;
 import com.inframanager.equipment.persistence.entity.EquipmentEntity;
 import com.inframanager.equipment.repository.EquipmentRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -48,15 +49,29 @@ public class EquipmentService {
     }
 
     public Equipment createEquipment(String name, String manufacturer, String model) {
+        if (equipmentRepository.existsByName(name)) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Equipment name already exists"
+            );
+        }
+
         Equipment newEquipment = new Equipment(name, manufacturer, model);
 
         EquipmentEntity entity = new EquipmentEntity();
         entity.setName(newEquipment.getName());
         entity.setManufacturer(newEquipment.getManufacturer());
         entity.setModel(newEquipment.getModel());
-
-        EquipmentEntity savedEntity = equipmentRepository.save(entity);
-
+        EquipmentEntity savedEntity;
+        try {
+            savedEntity = equipmentRepository.save(entity);
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Equipment name already exists",
+                    e
+            );
+        }
         return Equipment.reconstitute(
                 savedEntity.getId(),
                 savedEntity.getName(),
@@ -64,5 +79,6 @@ public class EquipmentService {
                 savedEntity.getModel(),
                 savedEntity.getIpAddress()
         );
+
     }
 }
