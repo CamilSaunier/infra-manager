@@ -37,7 +37,7 @@ public class EquipmentService {
                         HttpStatus.NOT_FOUND,
                         "Equipment not found"
                 ));
-        
+
         return Equipment.reconstitute(
                 entity.getId(),
                 entity.getName(),
@@ -57,10 +57,12 @@ public class EquipmentService {
 
         EquipmentEntity savedEntity = equipmentRepository.save(entity);
 
-        return new Equipment(
+        return Equipment.reconstitute(
+                savedEntity.getId(),
                 savedEntity.getName(),
                 savedEntity.getManufacturer(),
-                savedEntity.getModel()
+                savedEntity.getModel(),
+                savedEntity.getIpAddress()
         );
     }
 }
