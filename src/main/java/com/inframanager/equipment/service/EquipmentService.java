@@ -109,4 +109,13 @@ public class EquipmentService {
                 savedEntity.getIpAddress()
         );
     }
+
+    public void deleteEquipment(Long id) {
+        EquipmentEntity equipment = equipmentRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Equipment not found"
+                ));
+        equipmentRepository.delete(equipment);
+    }
 }

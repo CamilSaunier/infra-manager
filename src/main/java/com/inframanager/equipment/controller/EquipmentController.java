@@ -5,6 +5,7 @@ import com.inframanager.equipment.domain.Equipment;
 import com.inframanager.equipment.dto.EquipmentRequest;
 import com.inframanager.equipment.dto.EquipmentResponse;
 import com.inframanager.equipment.service.EquipmentService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,5 +53,11 @@ public class EquipmentController {
                 equipmentBody.manufacturer(),
                 equipmentBody.model());
         return EquipmentResponse.from(equipmentUpdated);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteEquipment(@PathVariable Long id) {
+        equipmentService.deleteEquipment(id);
+        return ResponseEntity.noContent().build();
     }
 }
