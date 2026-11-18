@@ -81,4 +81,32 @@ public class EquipmentService {
         );
 
     }
+
+    public Equipment updateEquipment(Long id, String name, String manufacturer, String model) {
+        EquipmentEntity equipment = equipmentRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Equipment not found"
+                ));
+        equipment.setName(name);
+        equipment.setModel(model);
+        equipment.setManufacturer(manufacturer);
+        EquipmentEntity savedEntity;
+        try {
+            savedEntity = equipmentRepository.save(equipment);
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Equipment name already exists",
+                    e
+            );
+        }
+        return Equipment.reconstitute(
+                savedEntity.getId(),
+                savedEntity.getName(),
+                savedEntity.getManufacturer(),
+                savedEntity.getModel(),
+                savedEntity.getIpAddress()
+        );
+    }
 }

@@ -43,4 +43,14 @@ public class EquipmentController {
         );
         return EquipmentResponse.from(newEquipment);
     }
+
+    @PutMapping("/{id}")
+    public EquipmentResponse updateEquipment(@PathVariable Long id, @RequestBody EquipmentRequest equipmentBody) {
+        Equipment equipmentUpdated = equipmentService.updateEquipment(
+                id,
+                equipmentBody.name(),
+                equipmentBody.manufacturer(),
+                equipmentBody.model());
+        return EquipmentResponse.from(equipmentUpdated);
+    }
 }
