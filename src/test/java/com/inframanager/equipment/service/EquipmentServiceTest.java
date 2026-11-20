@@ -72,5 +72,18 @@ public class EquipmentServiceTest {
         assertEquals("Catalyst 9200", equipment.getModel());
     }
 
+    @Test
+    public void ShouldThrowNotFoundWhenEquipmentDoesNotExist() {
+        EquipmentRepository repository = mock(EquipmentRepository.class);
+        when(repository.findById(222L)).thenReturn(Optional.empty());
+        EquipmentService service = new EquipmentService((repository));
+        ResponseStatusException exception = assertThrows(
+                ResponseStatusException.class,
+                () -> service.getEquipmentById(222L)
+        );
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+        verify(repository).findById(222L);
+    }
+
 
 }
