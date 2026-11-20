@@ -4,6 +4,7 @@ import com.inframanager.equipment.domain.Equipment;
 import com.inframanager.equipment.persistence.entity.EquipmentEntity;
 import com.inframanager.equipment.repository.EquipmentRepository;
 import org.junit.jupiter.api.Test;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -109,6 +110,78 @@ public class EquipmentServiceTest {
         assertEquals(2, equipmentList.size());
         assertEquals("Routeur principal", equipmentList.getFirst().getName());
         verify(repository, times(1)).findAll();
+    }
+
+    @Test
+    public void shouldUpdateEquipment() {
+        EquipmentRepository repository = mock(EquipmentRepository.class);
+        EquipmentEntity entity = new EquipmentEntity();
+        entity.setName("Routeur principal");
+        entity.setManufacturer("Cisco");
+        entity.setModel("Catalyst 9200");
+
+        when(repository.findById(1L)).thenReturn(Optional.of(entity));
+        when(repository.save(any(EquipmentEntity.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        EquipmentService service = new EquipmentService(repository);
+
+        Equipment updatedEquipment = service.updateEquipment(
+                1L,
+                "Switch principal",
+                "HP",
+                "Aruba 6100"
+        );
+
+        assertEquals("Switch principal", updatedEquipment.getName());
+        assertEquals("HP", updatedEquipment.getManufacturer());
+        assertEquals("Aruba 6100", updatedEquipment.getModel());
+
+        verify(repository, times(1)).save(any(EquipmentEntity.class));
+    }
+
+    @Test
+    public void shouldThrowNotFoundWhenUpdatingNonExistingEquipment() {
+        EquipmentRepository repository = mock(EquipmentRepository.class);
+        when(repository.findById(222L)).thenReturn(Optional.empty());
+        EquipmentService service = new EquipmentService((repository));
+        ResponseStatusException exception = assertThrows(
+                ResponseStatusException.class,
+                () -> service.updateEquipment(222L,
+                        "Switch principal",
+                        "HP",
+                        "Aruba 6100")
+        );
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+        verify(repository).findById(222L);
+    }
+
+    @Test
+    public void shouldThrowConflictWhenUpdatingEquipmentWithExistingName() {
+        EquipmentRepository repository = mock(EquipmentRepository.class);
+
+        EquipmentEntity entity = new EquipmentEntity();
+        entity.setName("Routeur principal");
+        entity.setManufacturer("Cisco");
+        entity.setModel("Catalyst 9200");
+
+        when(repository.findById(1L)).thenReturn(Optional.of(entity));
+        when(repository.save(any(EquipmentEntity.class)))
+                .thenThrow(new DataIntegrityViolationException("Duplicate name"));
+
+        EquipmentService service = new EquipmentService(repository);
+
+        ResponseStatusException exception = assertThrows(
+                ResponseStatusException.class,
+                () -> service.updateEquipment(
+                        1L,
+                        "Switch principal",
+                        "HP",
+                        "Aruba 6100"
+                )
+        );
+
+        assertEquals(HttpStatus.CONFLICT, exception.getStatusCode());
     }
 
 }
