@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -85,5 +86,29 @@ public class EquipmentServiceTest {
         verify(repository).findById(222L);
     }
 
+    @Test
+    public void shouldGetAListOfEquipment() {
+        EquipmentRepository repository = mock(EquipmentRepository.class);
+
+        EquipmentEntity firstEntity = new EquipmentEntity();
+        firstEntity.setName("Routeur principal");
+        firstEntity.setManufacturer("Cisco");
+        firstEntity.setModel("Catalyst 9200");
+
+        EquipmentEntity secondEntity = new EquipmentEntity();
+        secondEntity.setName("Switch secondaire");
+        secondEntity.setManufacturer("HP");
+        secondEntity.setModel("Aruba 6100");
+
+        when(repository.findAll()).thenReturn(List.of(firstEntity, secondEntity));
+
+        EquipmentService service = new EquipmentService(repository);
+
+        List<Equipment> equipmentList = service.getAllEquipment();
+
+        assertEquals(2, equipmentList.size());
+        assertEquals("Routeur principal", equipmentList.getFirst().getName());
+        verify(repository, times(1)).findAll();
+    }
 
 }
