@@ -184,4 +184,39 @@ public class EquipmentServiceTest {
         assertEquals(HttpStatus.CONFLICT, exception.getStatusCode());
     }
 
+    @Test
+    public void shouldDeleteEquipment() {
+        EquipmentRepository repository = mock(EquipmentRepository.class);
+
+        EquipmentEntity entity = new EquipmentEntity();
+        entity.setName("Routeur principal");
+        entity.setManufacturer("Cisco");
+        entity.setModel("Catalyst 9200");
+
+        when(repository.findById(1L)).thenReturn(Optional.of(entity));
+
+        EquipmentService service = new EquipmentService(repository);
+
+        service.deleteEquipment(1L);
+
+        verify(repository, times(1)).delete(entity);
+    }
+
+    @Test
+    public void shouldThrowNotFoundWhenDeletingNonExistingEquipment() {
+        EquipmentRepository repository = mock(EquipmentRepository.class);
+
+        when(repository.findById(222L)).thenReturn(Optional.empty());
+
+        EquipmentService service = new EquipmentService(repository);
+
+        ResponseStatusException exception = assertThrows(
+                ResponseStatusException.class,
+                () -> service.deleteEquipment(222L)
+        );
+
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+
+        verify(repository, never()).delete(any(EquipmentEntity.class));
+    }
 }
