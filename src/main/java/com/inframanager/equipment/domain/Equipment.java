@@ -7,13 +7,16 @@ public class Equipment {
     private String model;
     private String ipAddress;
 
-    public Equipment(String name, String manufacturer, String model) {
+    public Equipment(String name, String manufacturer, String model, String ipAddress) {
         validateName(name);
         validateManufacturer(manufacturer);
         validateModel(model);
+        validateIpAddress(ipAddress);
+
         this.name = name;
         this.manufacturer = manufacturer;
         this.model = model;
+        this.ipAddress = ipAddress;
     }
 
     public static Equipment reconstitute(
@@ -23,9 +26,8 @@ public class Equipment {
             String model,
             String ipAddress
     ) {
-        Equipment equipment = new Equipment(name, manufacturer, model);
+        Equipment equipment = new Equipment(name, manufacturer, model, ipAddress);
         equipment.id = id;
-        equipment.ipAddress = ipAddress;
 
         return equipment;
     }
@@ -48,15 +50,15 @@ public class Equipment {
         }
     }
 
-    private boolean validateIpAddress(String ipAddress) {
+    private void validateIpAddress(String ipAddress) {
         if (ipAddress == null) {
-            return true;
+            return;
         }
 
         String[] parties = ipAddress.split("\\.");
 
         if (parties.length != 4) {
-            return false;
+            throw new IllegalArgumentException("Invalid IP address");
         }
 
         for (String partie : parties) {
@@ -64,14 +66,12 @@ public class Equipment {
                 int nombre = Integer.parseInt(partie);
 
                 if (nombre < 0 || nombre > 255) {
-                    return false;
+                    throw new IllegalArgumentException("Invalid IP address");
                 }
             } catch (NumberFormatException e) {
-                return false;
+                throw new IllegalArgumentException("Invalid IP address", e);
             }
         }
-
-        return true;
     }
 
     public void setName(String newName) {
@@ -90,9 +90,7 @@ public class Equipment {
     }
 
     public void setIpAddress(String newIpAddress) {
-        if (!validateIpAddress(newIpAddress)) {
-            throw new IllegalArgumentException("Adresse IP invalide");
-        }
+        validateIpAddress(newIpAddress);
         this.ipAddress = newIpAddress;
     }
 

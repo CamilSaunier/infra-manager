@@ -13,7 +13,8 @@ class EquipmentResponseTest {
         Equipment equipment = new Equipment(
                 "Routeur principal",
                 "Cisco",
-                "Catalyst 9200"
+                "Catalyst 9200",
+                null
         );
 
         equipment.setIpAddress("192.168.1.1");

@@ -5,6 +5,7 @@ import com.inframanager.equipment.domain.Equipment;
 import com.inframanager.equipment.dto.EquipmentRequest;
 import com.inframanager.equipment.dto.EquipmentResponse;
 import com.inframanager.equipment.service.EquipmentService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +37,7 @@ public class EquipmentController {
     }
 
     @PostMapping
-    public EquipmentResponse createEquipment(@RequestBody EquipmentRequest equipmentBody) {
+    public EquipmentResponse createEquipment(@Valid @RequestBody EquipmentRequest equipmentBody) {
         Equipment newEquipment = equipmentService.createEquipment(
                 equipmentBody.name(),
                 equipmentBody.manufacturer(),
@@ -46,7 +47,7 @@ public class EquipmentController {
     }
 
     @PutMapping("/{id}")
-    public EquipmentResponse updateEquipment(@PathVariable Long id, @RequestBody EquipmentRequest equipmentBody) {
+    public EquipmentResponse updateEquipment(@PathVariable Long id, @Valid @RequestBody EquipmentRequest equipmentBody) {
         Equipment equipmentUpdated = equipmentService.updateEquipment(
                 id,
                 equipmentBody.name(),

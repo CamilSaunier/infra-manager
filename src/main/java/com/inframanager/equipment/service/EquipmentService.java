@@ -56,7 +56,7 @@ public class EquipmentService {
             );
         }
 
-        Equipment newEquipment = new Equipment(name, manufacturer, model);
+        Equipment newEquipment = new Equipment(name, manufacturer, model, null);
 
         EquipmentEntity entity = new EquipmentEntity();
         entity.setName(newEquipment.getName());

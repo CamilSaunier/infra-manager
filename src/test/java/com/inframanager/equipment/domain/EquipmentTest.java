@@ -12,7 +12,8 @@ public class EquipmentTest {
         Equipment equipment = new Equipment(
                 "Routeur principal",
                 "Cisco",
-                "Catalyst 9200"
+                "Catalyst 9200",
+                null
         );
 
         assertEquals("Routeur principal", equipment.getName());
@@ -29,7 +30,8 @@ public class EquipmentTest {
                 () -> new Equipment(
                         "",
                         "Cisco",
-                        "Catalyst 9200"
+                        "Catalyst 9200",
+                        null
                 )
 
         );
@@ -42,7 +44,8 @@ public class EquipmentTest {
                 () -> new Equipment(
                         null,
                         "Cisco",
-                        "Catalyst 9200"
+                        "Catalyst 9200",
+                        null
                 )
 
         );
@@ -56,7 +59,8 @@ public class EquipmentTest {
                 () -> new Equipment(
                         "Routeur principal",
                         "",
-                        "Catalyst 9200"
+                        "Catalyst 9200",
+                        null
                 )
 
         );
@@ -69,7 +73,8 @@ public class EquipmentTest {
                 () -> new Equipment(
                         "Routeur principal",
                         null,
-                        "Catalyst 9200"
+                        "Catalyst 9200",
+                        null
                 )
 
         );
@@ -82,7 +87,8 @@ public class EquipmentTest {
                 () -> new Equipment(
                         "Routeur principal",
                         "Cisco",
-                        ""
+                        "",
+                        null
                 )
 
         );
@@ -95,6 +101,7 @@ public class EquipmentTest {
                 () -> new Equipment(
                         "Routeur principal",
                         "Cisco",
+                        null,
                         null
                 )
 
@@ -106,7 +113,8 @@ public class EquipmentTest {
         Equipment equipment = new Equipment(
                 "Routeur principal",
                 "Cisco",
-                "Catalyst 9200"
+                "Catalyst 9200",
+                null
         );
         equipment.setIpAddress("192.168.1.10");
         assertEquals("192.168.1.10", equipment.getIpAddress());
@@ -121,7 +129,8 @@ public class EquipmentTest {
                     Equipment equipment = new Equipment(
                             "Routeur principal",
                             "Cisco",
-                            "Catalyst 9200"
+                            "Catalyst 9200",
+                            null
                     );
 
                     equipment.setIpAddress("192.168.1.256");
@@ -137,7 +146,8 @@ public class EquipmentTest {
                     Equipment equipment = new Equipment(
                             "Routeur principal",
                             "Cisco",
-                            "Catalyst 9200"
+                            "Catalyst 9200",
+                            null
                     );
 
                     equipment.setIpAddress("192.168.1");
@@ -153,7 +163,8 @@ public class EquipmentTest {
                     Equipment equipment = new Equipment(
                             "Routeur principal",
                             "Cisco",
-                            "Catalyst 9200"
+                            "Catalyst 9200",
+                            null
                     );
 
                     equipment.setIpAddress("192.168.1.A");
@@ -166,7 +177,8 @@ public class EquipmentTest {
         Equipment equipment = new Equipment(
                 "Routeur principal",
                 "Cisco",
-                "Catalyst 9200"
+                "Catalyst 9200",
+                null
         );
         equipment.setIpAddress("192.168.1.10");
         assertThrows(
