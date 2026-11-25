@@ -19,15 +19,28 @@ public class EquipmentService {
         this.equipmentRepository = equipmentRepository;
     }
 
-    public Page<Equipment> getAllEquipment(Pageable pageable) {
-        return equipmentRepository.findAll(pageable)
-                .map(entity -> Equipment.reconstitute(
-                        entity.getId(),
-                        entity.getName(),
-                        entity.getManufacturer(),
-                        entity.getModel(),
-                        entity.getIpAddress()
-                ));
+    public Page<Equipment> getAllEquipment(String search, Pageable pageable) {
+
+        Page<EquipmentEntity> equipmentPage;
+
+        if (search == null || search.isBlank()) {
+            equipmentPage = equipmentRepository.findAll(pageable);
+        } else {
+            equipmentPage = equipmentRepository
+                    .findByNameContainingIgnoreCaseOrManufacturerContainingIgnoreCase(
+                            search,
+                            search,
+                            pageable
+                    );
+        }
+
+        return equipmentPage.map(entity -> Equipment.reconstitute(
+                entity.getId(),
+                entity.getName(),
+                entity.getManufacturer(),
+                entity.getModel(),
+                entity.getIpAddress()
+        ));
     }
 
     public Equipment getEquipmentById(Long id) {

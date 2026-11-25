@@ -92,36 +92,42 @@ public class EquipmentServiceTest {
     }
 
     @Test
-    public void shouldGetAListOfEquipment() {
+    public void shouldSearchEquipmentByNameOrManufacturer() {
         EquipmentRepository repository = mock(EquipmentRepository.class);
 
-        EquipmentEntity firstEntity = new EquipmentEntity();
-        firstEntity.setName("Routeur principal");
-        firstEntity.setManufacturer("Cisco");
-        firstEntity.setModel("Catalyst 9200");
-
-        EquipmentEntity secondEntity = new EquipmentEntity();
-        secondEntity.setName("Switch secondaire");
-        secondEntity.setManufacturer("HP");
-        secondEntity.setModel("Aruba 6100");
+        EquipmentEntity entity = new EquipmentEntity();
+        entity.setName("Switch principal");
+        entity.setManufacturer("Cisco");
+        entity.setModel("Catalyst 9200");
 
         Pageable pageable = PageRequest.of(0, 10);
 
         Page<EquipmentEntity> page = new PageImpl<>(
-                List.of(firstEntity, secondEntity),
+                List.of(entity),
                 pageable,
-                2
+                1
         );
 
-        when(repository.findAll(pageable)).thenReturn(page);
+        when(repository
+                .findByNameContainingIgnoreCaseOrManufacturerContainingIgnoreCase(
+                        "cisco",
+                        "cisco",
+                        pageable
+                )).thenReturn(page);
 
         EquipmentService service = new EquipmentService(repository);
 
-        Page<Equipment> equipmentPage = service.getAllEquipment(pageable);
+        Page<Equipment> result = service.getAllEquipment("cisco", pageable);
 
-        assertEquals(2, equipmentPage.getContent().size());
-        assertEquals("Routeur principal", equipmentPage.getContent().getFirst().getName());
-        verify(repository, times(1)).findAll(pageable);
+        assertEquals(1, result.getContent().size());
+        assertEquals("Switch principal", result.getContent().getFirst().getName());
+
+        verify(repository, times(1))
+                .findByNameContainingIgnoreCaseOrManufacturerContainingIgnoreCase(
+                        "cisco",
+                        "cisco",
+                        pageable
+                );
     }
 
     @Test

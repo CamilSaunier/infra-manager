@@ -22,10 +22,12 @@ public class EquipmentController {
     }
 
     @GetMapping
-    public Page<EquipmentResponse> getEquipment(Pageable pageable) {
-        return equipmentService.getAllEquipment(pageable)
+    public Page<EquipmentResponse> getEquipment(
+            @RequestParam(required = false) String search,
+            Pageable pageable
+    ) {
+        return equipmentService.getAllEquipment(search, pageable)
                 .map(EquipmentResponse::from);
-
     }
 
     @GetMapping("/{id}")
