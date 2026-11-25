@@ -6,10 +6,10 @@ import com.inframanager.equipment.dto.EquipmentRequest;
 import com.inframanager.equipment.dto.EquipmentResponse;
 import com.inframanager.equipment.service.EquipmentService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/equipment")
@@ -22,11 +22,10 @@ public class EquipmentController {
     }
 
     @GetMapping
-    public List<EquipmentResponse> getEquipment() {
-        return equipmentService.getAllEquipment()
-                .stream()
-                .map(EquipmentResponse::from)
-                .toList();
+    public Page<EquipmentResponse> getEquipment(Pageable pageable) {
+        return equipmentService.getAllEquipment(pageable)
+                .map(EquipmentResponse::from);
+
     }
 
     @GetMapping("/{id}")

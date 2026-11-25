@@ -5,6 +5,10 @@ import com.inframanager.equipment.persistence.entity.EquipmentEntity;
 import com.inframanager.equipment.repository.EquipmentRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -101,15 +105,23 @@ public class EquipmentServiceTest {
         secondEntity.setManufacturer("HP");
         secondEntity.setModel("Aruba 6100");
 
-        when(repository.findAll()).thenReturn(List.of(firstEntity, secondEntity));
+        Pageable pageable = PageRequest.of(0, 10);
+
+        Page<EquipmentEntity> page = new PageImpl<>(
+                List.of(firstEntity, secondEntity),
+                pageable,
+                2
+        );
+
+        when(repository.findAll(pageable)).thenReturn(page);
 
         EquipmentService service = new EquipmentService(repository);
 
-        List<Equipment> equipmentList = service.getAllEquipment();
+        Page<Equipment> equipmentPage = service.getAllEquipment(pageable);
 
-        assertEquals(2, equipmentList.size());
-        assertEquals("Routeur principal", equipmentList.getFirst().getName());
-        verify(repository, times(1)).findAll();
+        assertEquals(2, equipmentPage.getContent().size());
+        assertEquals("Routeur principal", equipmentPage.getContent().getFirst().getName());
+        verify(repository, times(1)).findAll(pageable);
     }
 
     @Test

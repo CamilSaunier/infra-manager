@@ -4,11 +4,11 @@ import com.inframanager.equipment.domain.Equipment;
 import com.inframanager.equipment.persistence.entity.EquipmentEntity;
 import com.inframanager.equipment.repository.EquipmentRepository;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
 
 @Service
 public class EquipmentService {
@@ -19,17 +19,15 @@ public class EquipmentService {
         this.equipmentRepository = equipmentRepository;
     }
 
-    public List<Equipment> getAllEquipment() {
-        return equipmentRepository.findAll()
-                .stream()
+    public Page<Equipment> getAllEquipment(Pageable pageable) {
+        return equipmentRepository.findAll(pageable)
                 .map(entity -> Equipment.reconstitute(
                         entity.getId(),
                         entity.getName(),
                         entity.getManufacturer(),
                         entity.getModel(),
                         entity.getIpAddress()
-                ))
-                .toList();
+                ));
     }
 
     public Equipment getEquipmentById(Long id) {
