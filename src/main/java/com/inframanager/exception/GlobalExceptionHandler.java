@@ -49,4 +49,17 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(exception.getStatusCode()).body(response);
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, Object>> handleInternalServerError(
+            Exception exception
+    ) {
+        Map<String, Object> response = Map.of(
+                "status", 500,
+                "error", "Internal Server Error",
+                "message", "An unexpected error occurred"
+        );
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    }
 }
