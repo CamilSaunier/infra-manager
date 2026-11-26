@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/equipment")
-public class EquipmentController {
+public class EquipmentController implements EquipmentApi {
 
     private final EquipmentService equipmentService;
 
