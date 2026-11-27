@@ -1,6 +1,6 @@
 package com.inframanager.equipment.repository;
 
-import com.inframanager.equipment.persistence.entity.EquipmentEntity;
+import com.inframanager.equipment.entity.EquipmentEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

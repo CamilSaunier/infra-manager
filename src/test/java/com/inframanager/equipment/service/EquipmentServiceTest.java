@@ -1,7 +1,7 @@
 package com.inframanager.equipment.service;
 
 import com.inframanager.equipment.domain.Equipment;
-import com.inframanager.equipment.persistence.entity.EquipmentEntity;
+import com.inframanager.equipment.entity.EquipmentEntity;
 import com.inframanager.equipment.repository.EquipmentRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.dao.DataIntegrityViolationException;

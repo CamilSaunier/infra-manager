@@ -1,7 +1,7 @@
 package com.inframanager.equipment.service;
 
 import com.inframanager.equipment.domain.Equipment;
-import com.inframanager.equipment.persistence.entity.EquipmentEntity;
+import com.inframanager.equipment.entity.EquipmentEntity;
 import com.inframanager.equipment.repository.EquipmentRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -73,6 +73,7 @@ public class EquipmentService {
         entity.setName(newEquipment.getName());
         entity.setManufacturer(newEquipment.getManufacturer());
         entity.setModel(newEquipment.getModel());
+        
         EquipmentEntity savedEntity;
         try {
             savedEntity = equipmentRepository.save(entity);
